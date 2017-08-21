@@ -1,0 +1,12 @@
+image: docker:latest
+
+services:
+  - docker:dind
+
+before_script:
+#  - rm -rf /home/gitlab-runner/builds
+
+build_image:
+  script:
+     - docker-compose --project-name postfix_monitoring up --build --remove-orphans --force-recreate -d
+#     - docker-compose --project-name postfix_monitoring up --build --remove-orphans --force-recreate -d

@@ -1,0 +1,39 @@
+version: '3.1'
+
+services:
+#  db:
+#    build:./
+#      context: ./db
+#      dockerfile: Dockerfile
+#    ports:
+#     - "5432:5432"
+
+  django:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    environment:
+      - DJANGO_SETTINGS_MODULE=backend.settings
+#      - DJANGO_SETTINGS_MODULE=backend.settings_docker
+    volumes:
+      - .:/app
+      - /var/postfix_monitoring:/var/postfix_monitoring # from,to
+    command: bash -c "python ./web/manage.py load_run"
+    ports:
+      - "8140:8000"
+
+
+  filter:
+    build:
+      context: ./filter
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+      - /var/postfix_monitoring:/var/postfix_monitoring # from,to
+    command: python filter/after_filter.py
+    ports:
+      - "10020:10020"
+    depends_on:
+      - django
+    links:
+      - django

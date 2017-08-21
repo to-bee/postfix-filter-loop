@@ -1,0 +1,5 @@
+__pycache__/
+db.sqlite3
+celerybeat.pid
+
+#web/power_meter/gan/MNIST_data/
